@@ -19,10 +19,6 @@ import { Textarea } from "../../../components/ui/textarea";
 import { LoaderCircle } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
-import { db } from "../../../utils/db";
-import { MockInterview } from "../../../utils/schema";
-
 import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import Interview from "../interview/[interviewId]/page";
@@ -100,22 +96,26 @@ Return ONLY JSON:
       setJsonResponse(finalData);
 
       if (finalData) {
-      const resp = await db.insert(MockInterview)
-  .values({
-    mockId: uuidv4(), // unique id
+    const saveRes = await fetch("/api/save-interview", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
     jobPosition,
     jobDesc,
     jobExperience,
-    jsonMockResp: JSON.stringify(finalData),
+    jsonMockResp: finalData,
     createdBy: user?.primaryEmailAddress?.emailAddress,
-    createdAt: moment().format("DD-MM-YYYY"),
-  })
-  .returning({ id: MockInterview.id, mockId: MockInterview.mockId }); // ✅ add mockId
-        console.log("Inserted ID:", resp);
-        if (resp) {
-          setOpenDialog(false);
-          router.push('/dashboard/interview/' + resp[0]?.mockId)
-        }
+  }),
+});
+
+const resp = await saveRes.json();
+
+if (resp?.mockId) {
+  setOpenDialog(false);
+  router.push('/dashboard/interview/' + resp.mockId);
+}
       } else {
         console.log("ERROR");
       }
