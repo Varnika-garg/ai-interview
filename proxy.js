@@ -8,14 +8,9 @@ const isProtectedRoute = createRouteMatcher([
 export default clerkMiddleware((auth, req) => {
   const { userId } = auth()
 
-  // ❗ Agar user login nahi hai → har route pe sign-in bhejo
-  if (!userId && req.nextUrl.pathname !== '/sign-in') {
-    return Response.redirect(new URL('/sign-in', req.url))
-  }
-
-  // ❗ Agar protected route hai → extra safety
-  if (userId && isProtectedRoute(req)) {
-    auth().protect()
+  // ❗ Sirf protected routes ko guard karo
+  if (isProtectedRoute(req) && !userId) {
+    return auth().redirectToSignIn()
   }
 })
 
