@@ -1,6 +1,6 @@
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
-
+<SignIn afterSignInUrl="/dashboard" />
 export default function Page() {
   return (
     <div className="min-h-screen grid md:grid-cols-2">
