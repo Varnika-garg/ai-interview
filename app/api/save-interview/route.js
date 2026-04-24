@@ -2,7 +2,7 @@ import { db } from "../../../utils/db";
 import { MockInterview } from "../../../utils/schema";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
-
+export const runtime = "nodejs";
 export async function POST(req) {
   const body = await req.json();
 

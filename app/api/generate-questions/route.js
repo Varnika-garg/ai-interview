@@ -1,10 +1,13 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+export const runtime = "nodejs";
 export async function POST(req) {
   try {
 
     const body = await req.json();
     const prompt = body.prompt;
+    if (!process.env.GEMINI_API_KEY) {
+  return Response.json({ error: "API key missing" });
+}
 
     if (!prompt) {
       return Response.json({ error: "Prompt missing" });

@@ -2,6 +2,7 @@ import { db } from "../../../utils/db";
 import { MockInterview } from "../../../utils/schema";
 import { eq } from "drizzle-orm";
 
+export const runtime = "nodejs";
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -22,6 +23,6 @@ export async function GET(req) {
 
   } catch (error) {
     console.error("API ERROR:", error);
-    return Response.json({ error: "Server error" }, { status: 500 });
+   return Response.json({ error: error.message }, { status: 500 });
   }
 }
