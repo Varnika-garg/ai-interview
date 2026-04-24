@@ -77,9 +77,27 @@ Return ONLY JSON:
 
       const data = await res.json();
 
-      const cleaned = data.data.replace(/```json|```/g, "").trim();
+// ✅ API error handle karo
+if (!data.data) {
+  console.error("API Error:", data);
+  toast.error(data.error || "Failed to generate questions");
+  setLoading(false);
+  return;
+}
 
-      const jsonData = JSON.parse(cleaned);
+// ✅ Safe cleaning
+const cleaned = data.data.replace(/```json|```/g, "").trim();
+
+// ✅ Safe JSON parse
+let jsonData;
+try {
+  jsonData = JSON.parse(cleaned);
+} catch (err) {
+  console.error("JSON parse error:", err);
+  toast.error("Invalid AI response");
+  setLoading(false);
+  return;
+}
 
       // 🔥 CLEAN + SHORTEN ANSWERS
       const finalData = jsonData.map((item) => ({
