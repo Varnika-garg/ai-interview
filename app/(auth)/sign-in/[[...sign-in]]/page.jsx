@@ -1,6 +1,8 @@
+"use client";
+
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
-<SignIn afterSignInUrl="/dashboard" />
+
 export default function Page() {
   return (
     <div className="min-h-screen grid md:grid-cols-2">
@@ -39,11 +41,10 @@ export default function Page() {
 
         {/* Login card */}
         <div className="relative w-full max-w-md bg-white md:bg-transparent p-6 rounded-xl shadow-lg md:shadow-none">
-          <SignIn />
+          <SignIn afterSignInUrl="/dashboard" />
         </div>
 
       </div>
     </div>
   );
 }
-
